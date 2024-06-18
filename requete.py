@@ -51,4 +51,9 @@ if __name__ == "__main__":
     pdf_3 = get_class_objet("SN candidate", 100, True)
 
     print(pdf_3[["i:objectId", "i:magpsf", "i:jd", "i:ra", "i:dec", "d:cdsxmatch", "v:lapse"]])
+
+    print()
+    pdf_4 = get_class_objet("Solar System MPC", 100, True)
     
+    print(pdf_4[["i:objectId", "i:magpsf", "i:jd", "i:ra", "i:dec", "d:cdsxmatch", "v:lapse", "i:ssnamenr", "i:ssdistnr"]])
+
