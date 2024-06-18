@@ -1,6 +1,8 @@
 import io
 import requests
 import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
 
 def get_one_object(name,enregistrer):
     r = requests.post(
@@ -33,8 +35,56 @@ def get_class_objet(classe_name,nombre,enregistrer):
         pdf.to_json(classe_name)
     return pdf
 
+fig, ax = plt.subplots()
+r = requests.post(
+  'https://fink-portal.org/api/v1/random',
+  json={
+      'n': 100,
+      'class': 'SN candidate',
+    'output-format': 'json',
+    'columns': 'i:fid,i:magpsf,i:objectId'
+  }
+)
+
+def get_info_asteroid(name):
+    r = requests.post(
+    'https://fink-portal.org/api/v1/sso',
+    json={
+    'n_or_d': name,
+    'output-format': 'json'
+  }
+)
+    pdf = pd.read_json(io.BytesIO(r.content))
 
 
+    print(pdf.columns)
+    noms=[]
+    for i in list(pdf['i:objectId']):
+        if i not in noms:
+            noms.append(i)
+    for name in noms:
+        print(name)
+        a = pdf[pdf["i:objectId"]==name]
+        pdf_fid_1 = a[a["i:fid"] == 1]
+        pdf_fid_2 = a[a["i:fid"] == 2]
+        
+        print(pdf_fid_1)
+        print()
+        print(pdf_fid_2)
+        
+        ax.scatter(
+            a["i:magpsf"].mean(),
+            pdf_fid_1["i:magpsf"].mean() - pdf_fid_2["i:magpsf"].mean(),
+            color='green',
+            label="systeme solar"
+        )
+    plt.gca().invert_xaxis()
+    plt.xlabel('magnitude')
+    plt.ylabel('g-r')
+
+    plt.legend()
+
+    plt.show()
 
 
 if __name__ == "__main__":
