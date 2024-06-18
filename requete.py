@@ -4,7 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-def get_one_object(name,enregistrer):
+def get_one_object(name,enregistrer=False):
     r = requests.post(
         'https://fink-portal.org/api/v1/objects',
         json={
@@ -20,7 +20,7 @@ def get_one_object(name,enregistrer):
     return pdf
 
 
-def get_class_objet(classe_name,nombre,enregistrer):
+def get_class_objet(classe_name,nombre,enregistrer=False):
     r = requests.post(
         'https://fink-portal.org/api/v1/latests',
         json={
@@ -36,8 +36,6 @@ def get_class_objet(classe_name,nombre,enregistrer):
     return pdf
 
 fig, ax = plt.subplots()
-r = requests.post(
-  'https://fink-portal.org/api/v1/random',
   json={
       'n': 100,
       'class': 'SN candidate',
