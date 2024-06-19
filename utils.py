@@ -6,7 +6,7 @@ def shift_ra(ra, org):
 
     Parameters
     ----------
-    ra : float
+    ra : array of float
         right ascension
     org : int
         origin of the coordinates
