@@ -61,10 +61,12 @@ if __name__ == "__main__":
                  ))
         
         
-    print(np.unique(datas[1][:185000], return_counts=True))
-    print(np.unique(datas[1][185001:], return_counts=True))
+    print(np.unique(datas[1], return_counts=True))
+    print(np.unique(data_test[1], return_counts=True))
     
-    clf = tree.DecisionTreeClassifier()
+    clf = RandomForestClassifier(max_depth=2, random_state=0)
+
+    # clf = tree.DecisionTreeClassifier(max_deth=15, min_samples_leaf=500)
     clf = entrainer_algo(clf, datas[0], datas[1])
     print("test sur les données d'entrainement")
     print(tester(clf, datas[0], datas[1]))
@@ -77,7 +79,6 @@ if __name__ == "__main__":
     # print(tester(clf, datas[0], datas[1]))
     
     exit()
-    clf = RandomForestClassifier(max_depth=2, random_state=0)
     
     print("demarrage de l'entrainement: ")
     clf = entrainer_algo(clf, datas[0][:185000], datas[1][:185000])
