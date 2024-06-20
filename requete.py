@@ -74,7 +74,7 @@ if __name__ == "__main__":
     print(pdf_ast[["i:objectId", "i:ssnamenr", "i:ssdistnr", "i:ra", "i:dec"]])
 
     ast_8467 = pdf_ast[pdf_ast["i:ssnamenr"] == 8467]
-
+    print(ast_8467)
     affichage.afficher_coordonées(ast_8467)
 
 
