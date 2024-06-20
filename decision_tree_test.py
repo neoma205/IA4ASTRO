@@ -34,7 +34,12 @@ def dataset_sam(names):
         ty+=t_etiquettes
     return (X,Y), (tx, ty)
 
-def tester(tree, x, y):
+def tester_opti(clf, x, y):
+    prediction = clf.predict(x)
+    mask_valid = prediction == np.array(y)
+    return mask_valid.sum() / len(y)
+
+def tester(clf, x, y):
     v=0
     t=0
     for i in range(len(x)):
@@ -49,6 +54,7 @@ def entrainer_algo(algo, data, etiquette):
 
 
 if __name__ == "__main__":
+    import time
     datas, data_test=dataset_sam(("dataset/dataset_EB__Candidate.parquet",
                  "dataset/dataset_EB_.parquet",
                  "dataset/dataset_LP__Candidate.parquet",
@@ -59,17 +65,26 @@ if __name__ == "__main__":
                  "dataset/dataset_Star.parquet",
                  "dataset/dataset_V_.parquet"
                  ))
-        
-        
-    print(np.unique(datas[1], return_counts=True))
-    print(np.unique(data_test[1], return_counts=True))
+           
+    print(np.unique(datas[1][:185000], return_counts=True))
+    print(np.unique(datas[1][185001:], return_counts=True))
     
-    clf = RandomForestClassifier(max_depth=2, random_state=0)
-
-    # clf = tree.DecisionTreeClassifier(max_deth=15, min_samples_leaf=500)
+    clf = tree.DecisionTreeClassifier(min_weight_fraction_leaf=0.1)
     clf = entrainer_algo(clf, datas[0], datas[1])
     print("test sur les données d'entrainement")
+
+    t_avant = time.time()
     print(tester(clf, datas[0], datas[1]))
+    print("temps ecoulé: {}".format(
+        time.time() - t_avant
+    ))
+
+    t_avant = time.time()
+    print(tester_opti(clf, datas[0], datas[1]))
+    print("temps ecoulé: {}".format(
+        time.time() - t_avant
+    ))
+
     print(tester(clf, data_test[0], data_test[1]))
     
     
