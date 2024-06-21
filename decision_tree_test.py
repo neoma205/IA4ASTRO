@@ -53,9 +53,20 @@ def entrainer_algo(algo, data, etiquette):
     return algo.fit(data, etiquette)
 
 
-if __name__ == "__main__":
-    import time
-    datas, data_test=dataset_sam(("dataset/dataset_EB__Candidate.parquet",
+def lancer_afficher_test(clf, datas_entrainement, data_test):
+    print("test sur les données d'entrainement")
+    print(tester_opti(clf, datas_entrainement[0], datas_entrainement[1]))
+    print("test sur nouvelles donnée")
+    print(tester_opti(clf, data_test[0], data_test[1]))
+    print()
+
+def lancer_afficher_entrainement(clf, data):
+    print("demarrage de l'entrainement: ")
+    return entrainer_algo(clf, data[0], data[1])
+
+    
+def recuperer_data() :
+    return dataset_sam(("dataset/dataset_EB__Candidate.parquet",
                  "dataset/dataset_EB_.parquet",
                  "dataset/dataset_LP__Candidate.parquet",
                  "dataset/dataset_LPV_.parquet",
@@ -65,42 +76,9 @@ if __name__ == "__main__":
                  "dataset/dataset_Star.parquet",
                  "dataset/dataset_V_.parquet"
                  ))
-           
-    print(np.unique(datas[1][:185000], return_counts=True))
-    print(np.unique(datas[1][185001:], return_counts=True))
-    
-    clf = tree.DecisionTreeClassifier(min_weight_fraction_leaf=0.1)
-    clf = entrainer_algo(clf, datas[0], datas[1])
-    print("test sur les données d'entrainement")
 
-    t_avant = time.time()
-    print(tester(clf, datas[0], datas[1]))
-    print("temps ecoulé: {}".format(
-        time.time() - t_avant
-    ))
-
-    t_avant = time.time()
-    print(tester_opti(clf, datas[0], datas[1]))
-    print("temps ecoulé: {}".format(
-        time.time() - t_avant
-    ))
-
-    print(tester(clf, data_test[0], data_test[1]))
-    
-    
-    # #clf = clf.fit(datas[0][:185000], datas[1][:185000])
-    
-    # print(tester(clf, datas[0][:185000], datas[1][:185000]))
-    # print(tester(clf, datas[0], datas[1]))
-    
-    exit()
-    
-    print("demarrage de l'entrainement: ")
-    clf = entrainer_algo(clf, datas[0][:185000], datas[1][:185000])
-    print("fin de l'entrainement")
-    
-    # print("prediction: ")
-    #print(tester(clf, datas[0][:185000], datas[1][:185000]))
-    
-    # tree.plot_tree(clf)
-    # plt.show()
+if __name__ == "__main__":    
+    datas, data_test = recuperer_data()
+    clf = lancer_afficher_entrainement(tree.DecisionTreeClassifier(), datas)
+    print()
+    lancer_afficher_test(clf, datas, data_test)
